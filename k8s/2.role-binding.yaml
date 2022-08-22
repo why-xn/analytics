@@ -9,7 +9,7 @@ rules:
   resources: ["pods", "configmaps"]
   verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["services","persistentvolumeclaims","secrets"]
+  resources: ["services","persistentvolumeclaims","secrets","pods/log"]
   verbs: ["get", "watch", "list"]
 
 
