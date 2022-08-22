@@ -1,0 +1,63 @@
+FROM whyxn/apache.spark-py:v3.2.1
+
+# Install Jupyter and Data Science libraries
+USER root
+
+RUN pip install numpy pandas 
+RUN pip install --no-cache-dir notedown plotly seaborn matplotlib 
+RUN pip install --no-cache-dir bokeh xlrd yellowbrick
+RUN pip install --no-cache-dir scikit-learn scikit-image
+RUN pip install --no-cache-dir scipy 
+RUN pip install --no-cache-dir pyarrow 
+RUN pip install --no-cache-dir dask 
+RUN pip install --no-cache-dir koalas 
+
+RUN  pip install  s3cmd
+RUN  pip install  ipython-sql
+RUN  pip install  sqlalchemy
+RUN  pip install  psycopg2-binary
+RUN  pip install  sparksql-magic
+RUN  pip install  sqlalchemy-trino
+RUN  pip install  smart_open
+RUN  pip install  clickhouse-driver
+RUN  pip install  clickhouse-sqlalchemy
+
+## install jupyterlab 3.0
+RUN pip install --no-cache-dir jupyterlab==3.0  \
+	&& mkdir -p /home/public && chmod 777 /home/public
+
+
+# Install Python Virtual Environment and IP Utils
+RUN apt-get update --allow-insecure-repositories && apt-get install  -y python3-venv unzip iputils-ping git curl
+
+
+#Node js repo
+RUN curl -sL https://deb.nodesource.com/setup_12.x |  bash -
+
+
+RUN  apt install -y nodejs
+RUN  apt install -y git
+RUN  apt install -y maven
+RUN  apt install -y vim
+
+# Install awscli v2
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm -rf ./aws/
+
+
+# Configure Jupyter User
+ARG NB_USER="whyxn"
+ARG NB_UID="1000"
+ARG NB_GROUP="analytics"
+ARG NB_GID="777"
+RUN groupadd -g $NB_GID $NB_GROUP \
+	&& useradd -m -s /bin/bash -N -u $NB_UID -g $NB_GID $NB_USER \
+	&& mkdir -p /home/$NB_USER/work \
+	&& mkdir -p /home/$NB_USER/.jupyter \
+	&& chown -R $NB_USER:$NB_GROUP /home/$NB_USER
+
+# Configure Working Directory
+USER $NB_USER
+WORKDIR /home/$NB_USER/work
