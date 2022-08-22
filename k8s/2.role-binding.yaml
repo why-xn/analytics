@@ -6,8 +6,11 @@ metadata:
   name: spark-k8s-driver
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["pods"]
+  resources: ["pods", "configmaps"]
   verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["services","persistentvolumeclaims","secrets"]
+  verbs: ["get", "watch", "list"]
 
 
 ---
