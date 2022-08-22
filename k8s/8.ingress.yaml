@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
@@ -13,14 +13,17 @@ metadata:
   namespace: analytics
 spec:
   rules:
-  - host: jnb.eu-west-1.klovercloud.io
+  - host: jnb.devxn.com
     http:
       paths:
       - backend:
-          serviceName: jupyter-notebook
-          servicePort: 8888
+          service:
+            name: jupyter-notebook
+            port:
+              number: 8888
         path: /
+        pathType: ImplementationSpecific
   tls:
   - hosts:
-    - jnb.eu-west-1.klovercloud.io
-    secretName: wild-certificate-eu-west-1-secret
+    - jnb.devxn.com
+    secretName: cert-secret

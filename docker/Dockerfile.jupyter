@@ -12,19 +12,14 @@ RUN pip install --no-cache-dir pyarrow
 RUN pip install --no-cache-dir dask 
 RUN pip install --no-cache-dir koalas 
 
-RUN  pip install  s3cmd
-RUN  pip install  ipython-sql
-RUN  pip install  sqlalchemy
-RUN  pip install  psycopg2-binary
-RUN  pip install  sparksql-magic
-RUN  pip install  sqlalchemy-trino
-RUN  pip install  smart_open
-RUN  pip install  clickhouse-driver
-RUN  pip install  clickhouse-sqlalchemy
-
 ## install jupyterlab 3.0
 RUN pip install --no-cache-dir jupyterlab==3.0  \
 	&& mkdir -p /home/public && chmod 777 /home/public
+
+
+RUN pip --no-cache-dir install py4j \
+ 	&& ln -s /opt/spark/python/pyspark /usr/local/lib/python3.9/dist-packages/pyspark \
+  	&& ln -s /opt/spark/python/pylintrc /usr/local/lib/python3.9/dist-packages/pylintrc
 
 
 # Install Python Virtual Environment and IP Utils
@@ -33,7 +28,6 @@ RUN apt-get update --allow-insecure-repositories && apt-get install  -y python3-
 
 #Node js repo
 RUN curl -sL https://deb.nodesource.com/setup_12.x |  bash -
-
 
 RUN  apt install -y nodejs
 RUN  apt install -y git
@@ -45,6 +39,16 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "a
 RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm -rf ./aws/
+
+
+RUN  pip install  s3cmd
+RUN  pip install  ipython-sql
+RUN  pip install  sqlalchemy
+RUN  pip install  psycopg2-binary
+RUN  pip install  sqlalchemy-trino
+RUN  pip install  smart_open
+RUN  pip install  clickhouse-driver
+RUN  pip install  clickhouse-sqlalchemy
 
 
 # Configure Jupyter User

@@ -9,6 +9,30 @@ spec:
     port: 8888
     protocol: TCP
     targetPort: 8888
+  - name: spark-ui
+    port: 4040
+    protocol: TCP
+    targetPort: 4040
+  selector:
+    app: jupyter-notebook
+  sessionAffinity: None
+  type: ClusterIP
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-driver
+  namespace: analytics
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
   - name: spark-driver-1
     port: 20020
     protocol: TCP
@@ -20,11 +44,7 @@ spec:
   - name: spark-driver-3
     port: 20022
     protocol: TCP
-    targetPort: 20021
-  - name: spark-ui
-    port: 4040
-    protocol: TCP
-    targetPort: 4040
+    targetPort: 20022
   selector:
     app: jupyter-notebook
   sessionAffinity: None
